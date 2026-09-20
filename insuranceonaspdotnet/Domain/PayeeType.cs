@@ -35,7 +35,7 @@ namespace insuranceonaspdotnet.Domain;
 
 public enum PayeeType
 {
-    Claimant=1,Beneficiary=2,ServiceProvider=3,Lienholder=4,Attorney=5
+    Claimant=1,Beneficiary=2,ServiceProvider_=3,Lienholder=4,Attorney=5
 }
 
 /// <summary>

@@ -18,7 +18,7 @@ public class ClaimPaymentRepository : IClaimPaymentRepository
             .Include(x => x.Claim)
             .Include(x => x.Exposure)
             .Include(x => x.Beneficiary)
-            .Include(x => x.ServiceProvider)
+            .Include(x => x.ServiceProvider_)
             .Include(x => x.Customer)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
@@ -30,7 +30,7 @@ public class ClaimPaymentRepository : IClaimPaymentRepository
             .Include(x => x.Claim)
             .Include(x => x.Exposure)
             .Include(x => x.Beneficiary)
-            .Include(x => x.ServiceProvider)
+            .Include(x => x.ServiceProvider_)
             .Include(x => x.Customer)
             .ToListAsync(cancellationToken);
     }

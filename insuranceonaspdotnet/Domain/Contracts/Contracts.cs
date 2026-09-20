@@ -503,7 +503,7 @@ public class ClaimPaymentResponse : ClaimPaymentRequest {
     }
 }
 
-public class ServiceProviderRequest {
+public class ServiceProvider_Request {
     public Guid Id { get; set; } = Guid.NewGuid();
  public virtual string? Name { get; set; } 
  public virtual string? TaxId { get; set; } 
@@ -511,9 +511,9 @@ public class ServiceProviderRequest {
  public virtual NetworkStatus? NetworkStatus { get; set; } 
 }
 
-public class ServiceProviderResponse : ServiceProviderRequest {
-    public static ServiceProviderResponse FromModel(ServiceProvider model) {
-        return new ServiceProviderResponse {
+public class ServiceProvider_Response : ServiceProvider_Request {
+    public static ServiceProvider_Response FromModel(ServiceProvider_ model) {
+        return new ServiceProvider_Response {
             Id = model.Id,
             Name = model.Name,
             TaxId = model.TaxId,

@@ -21,8 +21,8 @@ public interface IClaimPaymentService {
     Task<bool> UnassignExposure(AssociationRequest request, CancellationToken cancellationToken);
     Task<bool> AssignBeneficiary(AssociationRequest request, CancellationToken cancellationToken);
     Task<bool> UnassignBeneficiary(AssociationRequest request, CancellationToken cancellationToken);
-    Task<bool> AssignServiceProvider(AssociationRequest request, CancellationToken cancellationToken);
-    Task<bool> UnassignServiceProvider(AssociationRequest request, CancellationToken cancellationToken);
+    Task<bool> AssignServiceProvider_(AssociationRequest request, CancellationToken cancellationToken);
+    Task<bool> UnassignServiceProvider_(AssociationRequest request, CancellationToken cancellationToken);
     Task<bool> AssignCustomer(AssociationRequest request, CancellationToken cancellationToken);
     Task<bool> UnassignCustomer(AssociationRequest request, CancellationToken cancellationToken);
 
@@ -132,10 +132,10 @@ public class ClaimPaymentService : IClaimPaymentService
         return true;
     }
 
-    public async Task<bool> AssignServiceProvider(AssociationRequest request, CancellationToken cancellationToken) {
+    public async Task<bool> AssignServiceProvider_(AssociationRequest request, CancellationToken cancellationToken) {
         return true;
     }
-    public async Task<bool> UnassignServiceProvider(AssociationRequest request, CancellationToken cancellationToken) {
+    public async Task<bool> UnassignServiceProvider_(AssociationRequest request, CancellationToken cancellationToken) {
         return true;
     }
 

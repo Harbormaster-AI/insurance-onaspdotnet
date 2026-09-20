@@ -22,8 +22,8 @@ public static class ClaimPaymentEndpoints
         group.MapPut("/unassignExposure", UnassignExposure);
         group.MapPut("/assignBeneficiary", AssignBeneficiary);
         group.MapPut("/unassignBeneficiary", UnassignBeneficiary);
-        group.MapPut("/assignServiceProvider", AssignServiceProvider);
-        group.MapPut("/unassignServiceProvider", UnassignServiceProvider);
+        group.MapPut("/assignServiceProvider_", AssignServiceProvider_);
+        group.MapPut("/unassignServiceProvider_", UnassignServiceProvider_);
         group.MapPut("/assignCustomer", AssignCustomer);
         group.MapPut("/unassignCustomer", UnassignCustomer);
 
@@ -143,19 +143,19 @@ public static class ClaimPaymentEndpoints
         return unassigned ? Results.NoContent() : Results.NotFound();
     }
 
-    private static async Task<IResult> AssignServiceProvider(
+    private static async Task<IResult> AssignServiceProvider_(
         AssociationRequest request,
         IClaimPaymentService service,
         CancellationToken cancellationToken) {
-        var assigned = await service.AssignServiceProvider(request, cancellationToken);
+        var assigned = await service.AssignServiceProvider_(request, cancellationToken);
         return assigned ? Results.NoContent() : Results.NotFound();
     }
 
-    private static async Task<IResult> UnassignServiceProvider(
+    private static async Task<IResult> UnassignServiceProvider_(
     AssociationRequest request,
     IClaimPaymentService service,
     CancellationToken cancellationToken) {
-        var unassigned = await service.UnassignServiceProvider(request, cancellationToken);
+        var unassigned = await service.UnassignServiceProvider_(request, cancellationToken);
         return unassigned ? Results.NoContent() : Results.NotFound();
     }
 

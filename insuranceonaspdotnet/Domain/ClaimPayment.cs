@@ -13,7 +13,7 @@ public class ClaimPayment
 public virtual Claim? Claim { get; set; } 
 public virtual Exposure? Exposure { get; set; } 
 public virtual Beneficiary? Beneficiary { get; set; } 
-public virtual ServiceProvider? ServiceProvider { get; set; } 
+public virtual ServiceProvider_? ServiceProvider_ { get; set; } 
 public virtual Customer? Customer { get; set; } 
  public virtual PayeeType? PayeeType { get; set; } 
  public virtual PaymentMethod? Method { get; set; } 

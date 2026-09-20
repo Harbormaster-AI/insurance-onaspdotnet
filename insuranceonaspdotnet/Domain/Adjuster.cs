@@ -11,7 +11,7 @@ public class Adjuster
  public virtual string? LastName { get; set; } 
  public virtual string? LicenseNumber { get; set; } 
 public virtual ICollection<Claim> Claims { get; set; } = new List<Claim>();
-public virtual ICollection<ServiceProvider> ServiceProviders { get; set; } = new List<ServiceProvider>();
+public virtual ICollection<ServiceProvider_> ServiceProviders { get; set; } = new List<ServiceProvider_>();
  public virtual AdjusterType? AdjusterType { get; set; } 
 
     public static Adjuster FromRequest(AdjusterRequest request) {
