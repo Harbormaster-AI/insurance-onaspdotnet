@@ -1,0 +1,5 @@
+@insuranceonaspdotnet.Api_HostAddress = http://localhost:5076
+
+GET {{insuranceonaspdotnet.Api_HostAddress}}/
+Accept: application/json
+
