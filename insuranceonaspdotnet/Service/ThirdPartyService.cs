@@ -1,6 +1,8 @@
+
 using insuranceonaspdotnet.Domain;
 using insuranceonaspdotnet.Persistence;
 using insuranceonaspdotnet.Contracts;
+using insuranceonaspdotnet.Telemetry;
 
 namespace insuranceonaspdotnet.Service;
 
@@ -11,7 +13,6 @@ public interface IThirdPartyService {
     Task<ThirdParty?> Get(IdentifierRequest identifier, CancellationToken cancellationToken);
     Task<IReadOnlyList<ThirdParty>> GetAll(CancellationToken cancellationToken);
     Task<bool> Delete(IdentifierRequest identifier, CancellationToken cancellationToken);
-
     // ------------------------------
     // Single Associations
     // -------------------------------
@@ -23,26 +24,38 @@ public interface IThirdPartyService {
 
 public class ThirdPartyService : IThirdPartyService
 {
+    private readonly ApplicationTelemetry _telemetry;
     private readonly IThirdPartyRepository _repository;
     private readonly ILogger<ThirdPartyService> _logger;
+    private readonly IServiceResolver _serviceResolver;
+
 
     public ThirdPartyService(
-        IThirdPartyRepository repository, ILogger<ThirdPartyService> logger )
+        ApplicationTelemetry telemetry,
+        IThirdPartyRepository repository,
+        ILogger<ThirdPartyService> logger,
+        IServiceResolver serviceResolver)
     {
+        _telemetry = telemetry;
         _repository = repository;
         _logger = logger;
+        _serviceResolver = serviceResolver;
     }
-
 
     public async Task Create(ThirdParty model, CancellationToken cancellationToken)
     {
         try
         {
-            await _repository.AddAsync(model, cancellationToken);
+            await _telemetry.Execute(
+                "ThirdParty",
+                "CreateThirdParty",
+                () => _repository.AddAsync(model, cancellationToken));
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Unexpected Error: {ex.Message}");
+            _logger.LogError(
+                    ex,
+                    "Unexpected error while creating Transaction.");
         }
     }
 
@@ -59,11 +72,16 @@ public class ThirdPartyService : IThirdPartyService
             existing.Address = model.Address;
             existing.PartyType = model.PartyType;
 
-            await _repository.UpdateAsync(existing, cancellationToken);
+            await _telemetry.Execute(
+                "ThirdParty",
+                "UpdateThirdParty",
+                () => _repository.UpdateAsync(existing, cancellationToken));
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Unexpected Error: {ex.Message}");
+            _logger.LogError(
+                    ex,
+                    "Unexpected error while creating Transaction.");
             return false;
         }
         return true;
@@ -85,22 +103,53 @@ public class ThirdPartyService : IThirdPartyService
 
         try
         {
-            await _repository.DeleteAsync(existing, cancellationToken);
+            await _telemetry.Execute(
+                "ThirdParty",
+                "UpdateThirdParty",
+                () => _repository.DeleteAsync(existing, cancellationToken));
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Unexpected Error: {ex.Message}");
+            _logger.LogError(
+                    ex,
+                    "Unexpected error while creating Transaction.");
             return false;
         }
         return true;
-
     }
 
 
     public async Task<bool> AddToSubrogations(MultipleAssociationRequest request, CancellationToken cancellationToken) {
+        try {
+            await _telemetry.Execute(
+                "ThirdParty",
+                "AddToSubrogations",
+                () => _repository.AddToSubrogationsAsync(request, cancellationToken));
+        }
+        catch (Exception ex)
+        {
+           _logger.LogError(
+                   ex,
+                   "Unexpected error while creating Transaction.");
+            return false;
+        }
         return true;
     }
+
     public async Task<bool> RemoveFromSubrogations(MultipleAssociationRequest request, CancellationToken cancellationToken) {
+        try {
+            await _telemetry.Execute(
+                "ThirdParty",
+                "RemoveFromSubrogations",
+                () => _repository.RemoveFromSubrogationsAsync(request, cancellationToken));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(
+                    ex,
+                    "Unexpected error while creating Transaction.");
+            return false;
+        }
         return true;
     }
 

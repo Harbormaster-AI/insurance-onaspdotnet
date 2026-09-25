@@ -1,4 +1,7 @@
+
+using insuranceonaspdotnet.Contracts;
 using insuranceonaspdotnet.Domain;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace insuranceonaspdotnet.Persistence;
@@ -42,4 +45,41 @@ public class ThirdPartyRepository : IThirdPartyRepository
         _db.ThirdPartys.Remove(thirdParty);
         await _db.SaveChangesAsync(cancellationToken);
     }
+
+
+    public async Task AddToSubrogationsAsync(
+        MultipleAssociationRequest request,
+        CancellationToken cancellationToken)
+    {
+        await _db.SubrogationRecoverys
+            .Where(subrogationRecovery =>
+                request.ChildIds.Contains(subrogationRecovery.Id))
+            .ExecuteUpdateAsync(setters =>
+                setters.SetProperty(
+                    subrogationRecovery =>
+                        EF.Property<Guid?>(
+                            subrogationRecovery,
+                            "Document_Id"),
+                    request.ParentId));
+    }
+
+    public async Task RemoveFromSubrogationsAsync(
+        MultipleAssociationRequest request,
+        CancellationToken cancellationToken)
+    {
+        await _db.SubrogationRecoverys
+            .Where(subrogationRecovery =>
+                request.ChildIds.Contains(subrogationRecovery.Id) &&
+                EF.Property<Guid?>(
+                    subrogationRecovery,
+                    "Document_Id") == request.ParentId)
+            .ExecuteUpdateAsync(setters =>
+                setters.SetProperty(
+                    subrogationRecovery =>
+                        EF.Property<Guid?>(
+                            subrogationRecovery,
+                            "Document_Id"),
+                    (Guid?)null));
+    }
+
 }

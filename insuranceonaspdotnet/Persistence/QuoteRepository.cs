@@ -1,4 +1,7 @@
+
+using insuranceonaspdotnet.Contracts;
 using insuranceonaspdotnet.Domain;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace insuranceonaspdotnet.Persistence;
@@ -46,4 +49,41 @@ public class QuoteRepository : IQuoteRepository
         _db.Quotes.Remove(quote);
         await _db.SaveChangesAsync(cancellationToken);
     }
+
+
+    public async Task AddToUnderwritingDecisionsAsync(
+        MultipleAssociationRequest request,
+        CancellationToken cancellationToken)
+    {
+        await _db.UnderwritingDecisions
+            .Where(underwritingDecision =>
+                request.ChildIds.Contains(underwritingDecision.Id))
+            .ExecuteUpdateAsync(setters =>
+                setters.SetProperty(
+                    underwritingDecision =>
+                        EF.Property<Guid?>(
+                            underwritingDecision,
+                            "Document_Id"),
+                    request.ParentId));
+    }
+
+    public async Task RemoveFromUnderwritingDecisionsAsync(
+        MultipleAssociationRequest request,
+        CancellationToken cancellationToken)
+    {
+        await _db.UnderwritingDecisions
+            .Where(underwritingDecision =>
+                request.ChildIds.Contains(underwritingDecision.Id) &&
+                EF.Property<Guid?>(
+                    underwritingDecision,
+                    "Document_Id") == request.ParentId)
+            .ExecuteUpdateAsync(setters =>
+                setters.SetProperty(
+                    underwritingDecision =>
+                        EF.Property<Guid?>(
+                            underwritingDecision,
+                            "Document_Id"),
+                    (Guid?)null));
+    }
+
 }

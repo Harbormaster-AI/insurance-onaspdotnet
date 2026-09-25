@@ -1,4 +1,7 @@
+
+using insuranceonaspdotnet.Contracts;
 using insuranceonaspdotnet.Domain;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace insuranceonaspdotnet.Persistence;
@@ -44,4 +47,77 @@ public class AgentRepository : IAgentRepository
         _db.Agents.Remove(agent);
         await _db.SaveChangesAsync(cancellationToken);
     }
+
+
+    public async Task AddToPoliciesAsync(
+        MultipleAssociationRequest request,
+        CancellationToken cancellationToken)
+    {
+        await _db.Policys
+            .Where(policy =>
+                request.ChildIds.Contains(policy.Id))
+            .ExecuteUpdateAsync(setters =>
+                setters.SetProperty(
+                    policy =>
+                        EF.Property<Guid?>(
+                            policy,
+                            "Document_Id"),
+                    request.ParentId));
+    }
+
+    public async Task RemoveFromPoliciesAsync(
+        MultipleAssociationRequest request,
+        CancellationToken cancellationToken)
+    {
+        await _db.Policys
+            .Where(policy =>
+                request.ChildIds.Contains(policy.Id) &&
+                EF.Property<Guid?>(
+                    policy,
+                    "Document_Id") == request.ParentId)
+            .ExecuteUpdateAsync(setters =>
+                setters.SetProperty(
+                    policy =>
+                        EF.Property<Guid?>(
+                            policy,
+                            "Document_Id"),
+                    (Guid?)null));
+    }
+
+
+    public async Task AddToCustomersAsync(
+        MultipleAssociationRequest request,
+        CancellationToken cancellationToken)
+    {
+        await _db.Customers
+            .Where(customer =>
+                request.ChildIds.Contains(customer.Id))
+            .ExecuteUpdateAsync(setters =>
+                setters.SetProperty(
+                    customer =>
+                        EF.Property<Guid?>(
+                            customer,
+                            "Document_Id"),
+                    request.ParentId));
+    }
+
+    public async Task RemoveFromCustomersAsync(
+        MultipleAssociationRequest request,
+        CancellationToken cancellationToken)
+    {
+        await _db.Customers
+            .Where(customer =>
+                request.ChildIds.Contains(customer.Id) &&
+                EF.Property<Guid?>(
+                    customer,
+                    "Document_Id") == request.ParentId)
+            .ExecuteUpdateAsync(setters =>
+                setters.SetProperty(
+                    customer =>
+                        EF.Property<Guid?>(
+                            customer,
+                            "Document_Id"),
+                    (Guid?)null));
+    }
+
 }

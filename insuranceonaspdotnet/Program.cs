@@ -1,7 +1,8 @@
 using insuranceonaspdotnet.Api;
 using insuranceonaspdotnet.Persistence;
 using insuranceonaspdotnet.Service;
-
+using insuranceonaspdotnet.Telemetry;
+using OpenTelemetry.Metrics;
 using Microsoft.EntityFrameworkCore;
 using Oracle.EntityFrameworkCore;
 
@@ -11,7 +12,6 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddOpenApi();
 builder.Services.AddHealthChecks()
     .AddDbContextCheck<ApplicationDbContext>();
-
 
 var dbEngineEnvironment = builder.Configuration["DB_TYPE"];
 
@@ -113,67 +113,84 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     // etc.
 });
 
-builder.Services.AddScoped<IInsurerRepository, InsurerRepository>();
-builder.Services.AddScoped<IInsuranceProductRepository, InsuranceProductRepository>();
-builder.Services.AddScoped<ICoverageDefinitionRepository, CoverageDefinitionRepository>();
-builder.Services.AddScoped<IDistributorRepository, DistributorRepository>();
-builder.Services.AddScoped<IAgentRepository, AgentRepository>();
-builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
-builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
-builder.Services.AddScoped<IQuoteRepository, QuoteRepository>();
-builder.Services.AddScoped<IUnderwritingDecisionRepository, UnderwritingDecisionRepository>();
-builder.Services.AddScoped<IUnderwriterRepository, UnderwriterRepository>();
-builder.Services.AddScoped<IPolicyRepository, PolicyRepository>();
-builder.Services.AddScoped<IEndorsementRepository, EndorsementRepository>();
-builder.Services.AddScoped<IPolicyCoverageRepository, PolicyCoverageRepository>();
-builder.Services.AddScoped<IInsuredObjectRepository, InsuredObjectRepository>();
-builder.Services.AddScoped<IBeneficiaryRepository, BeneficiaryRepository>();
-builder.Services.AddScoped<IBillingAccountRepository, BillingAccountRepository>();
-builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
-builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
-builder.Services.AddScoped<IClaimRepository, ClaimRepository>();
-builder.Services.AddScoped<IIncidentRepository, IncidentRepository>();
-builder.Services.AddScoped<IExposureRepository, ExposureRepository>();
-builder.Services.AddScoped<IAdjusterRepository, AdjusterRepository>();
-builder.Services.AddScoped<IClaimReserveRepository, ClaimReserveRepository>();
-builder.Services.AddScoped<IClaimPaymentRepository, ClaimPaymentRepository>();
-builder.Services.AddScoped<IServiceProvider_Repository, ServiceProvider_Repository>();
-builder.Services.AddScoped<IReinsuranceAgreementRepository, ReinsuranceAgreementRepository>();
-builder.Services.AddScoped<ISubrogationRecoveryRepository, SubrogationRecoveryRepository>();
-builder.Services.AddScoped<IThirdPartyRepository, ThirdPartyRepository>();
-builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
+    builder.Services.AddScoped<IInsurerRepository, InsurerRepository>();
+    builder.Services.AddScoped<IInsuranceProductRepository, InsuranceProductRepository>();
+    builder.Services.AddScoped<ICoverageDefinitionRepository, CoverageDefinitionRepository>();
+    builder.Services.AddScoped<IDistributorRepository, DistributorRepository>();
+    builder.Services.AddScoped<IAgentRepository, AgentRepository>();
+    builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+    builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
+    builder.Services.AddScoped<IQuoteRepository, QuoteRepository>();
+    builder.Services.AddScoped<IUnderwritingDecisionRepository, UnderwritingDecisionRepository>();
+    builder.Services.AddScoped<IUnderwriterRepository, UnderwriterRepository>();
+    builder.Services.AddScoped<IPolicyRepository, PolicyRepository>();
+    builder.Services.AddScoped<IEndorsementRepository, EndorsementRepository>();
+    builder.Services.AddScoped<IPolicyCoverageRepository, PolicyCoverageRepository>();
+    builder.Services.AddScoped<IInsuredObjectRepository, InsuredObjectRepository>();
+    builder.Services.AddScoped<IBeneficiaryRepository, BeneficiaryRepository>();
+    builder.Services.AddScoped<IBillingAccountRepository, BillingAccountRepository>();
+    builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+    builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+    builder.Services.AddScoped<IClaimRepository, ClaimRepository>();
+    builder.Services.AddScoped<IIncidentRepository, IncidentRepository>();
+    builder.Services.AddScoped<IExposureRepository, ExposureRepository>();
+    builder.Services.AddScoped<IAdjusterRepository, AdjusterRepository>();
+    builder.Services.AddScoped<IClaimReserveRepository, ClaimReserveRepository>();
+    builder.Services.AddScoped<IClaimPaymentRepository, ClaimPaymentRepository>();
+    builder.Services.AddScoped<IServiceProvider_Repository, ServiceProvider_Repository>();
+    builder.Services.AddScoped<IReinsuranceAgreementRepository, ReinsuranceAgreementRepository>();
+    builder.Services.AddScoped<ISubrogationRecoveryRepository, SubrogationRecoveryRepository>();
+    builder.Services.AddScoped<IThirdPartyRepository, ThirdPartyRepository>();
+    builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
 
-builder.Services.AddScoped<IInsurerService, InsurerService>();
-builder.Services.AddScoped<IInsuranceProductService, InsuranceProductService>();
-builder.Services.AddScoped<ICoverageDefinitionService, CoverageDefinitionService>();
-builder.Services.AddScoped<IDistributorService, DistributorService>();
-builder.Services.AddScoped<IAgentService, AgentService>();
-builder.Services.AddScoped<ICustomerService, CustomerService>();
-builder.Services.AddScoped<IApplicationService, ApplicationService>();
-builder.Services.AddScoped<IQuoteService, QuoteService>();
-builder.Services.AddScoped<IUnderwritingDecisionService, UnderwritingDecisionService>();
-builder.Services.AddScoped<IUnderwriterService, UnderwriterService>();
-builder.Services.AddScoped<IPolicyService, PolicyService>();
-builder.Services.AddScoped<IEndorsementService, EndorsementService>();
-builder.Services.AddScoped<IPolicyCoverageService, PolicyCoverageService>();
-builder.Services.AddScoped<IInsuredObjectService, InsuredObjectService>();
-builder.Services.AddScoped<IBeneficiaryService, BeneficiaryService>();
-builder.Services.AddScoped<IBillingAccountService, BillingAccountService>();
-builder.Services.AddScoped<IInvoiceService, InvoiceService>();
-builder.Services.AddScoped<IPaymentService, PaymentService>();
-builder.Services.AddScoped<IClaimService, ClaimService>();
-builder.Services.AddScoped<IIncidentService, IncidentService>();
-builder.Services.AddScoped<IExposureService, ExposureService>();
-builder.Services.AddScoped<IAdjusterService, AdjusterService>();
-builder.Services.AddScoped<IClaimReserveService, ClaimReserveService>();
-builder.Services.AddScoped<IClaimPaymentService, ClaimPaymentService>();
-builder.Services.AddScoped<IServiceProvider_Service, ServiceProvider_Service>();
-builder.Services.AddScoped<IReinsuranceAgreementService, ReinsuranceAgreementService>();
-builder.Services.AddScoped<ISubrogationRecoveryService, SubrogationRecoveryService>();
-builder.Services.AddScoped<IThirdPartyService, ThirdPartyService>();
-builder.Services.AddScoped<IDocumentService, DocumentService>();
+    builder.Services.AddScoped<IInsurerService, InsurerService>();
+    builder.Services.AddScoped<IInsuranceProductService, InsuranceProductService>();
+    builder.Services.AddScoped<ICoverageDefinitionService, CoverageDefinitionService>();
+    builder.Services.AddScoped<IDistributorService, DistributorService>();
+    builder.Services.AddScoped<IAgentService, AgentService>();
+    builder.Services.AddScoped<ICustomerService, CustomerService>();
+    builder.Services.AddScoped<IApplicationService, ApplicationService>();
+    builder.Services.AddScoped<IQuoteService, QuoteService>();
+    builder.Services.AddScoped<IUnderwritingDecisionService, UnderwritingDecisionService>();
+    builder.Services.AddScoped<IUnderwriterService, UnderwriterService>();
+    builder.Services.AddScoped<IPolicyService, PolicyService>();
+    builder.Services.AddScoped<IEndorsementService, EndorsementService>();
+    builder.Services.AddScoped<IPolicyCoverageService, PolicyCoverageService>();
+    builder.Services.AddScoped<IInsuredObjectService, InsuredObjectService>();
+    builder.Services.AddScoped<IBeneficiaryService, BeneficiaryService>();
+    builder.Services.AddScoped<IBillingAccountService, BillingAccountService>();
+    builder.Services.AddScoped<IInvoiceService, InvoiceService>();
+    builder.Services.AddScoped<IPaymentService, PaymentService>();
+    builder.Services.AddScoped<IClaimService, ClaimService>();
+    builder.Services.AddScoped<IIncidentService, IncidentService>();
+    builder.Services.AddScoped<IExposureService, ExposureService>();
+    builder.Services.AddScoped<IAdjusterService, AdjusterService>();
+    builder.Services.AddScoped<IClaimReserveService, ClaimReserveService>();
+    builder.Services.AddScoped<IClaimPaymentService, ClaimPaymentService>();
+    builder.Services.AddScoped<IServiceProvider_Service, ServiceProvider_Service>();
+    builder.Services.AddScoped<IReinsuranceAgreementService, ReinsuranceAgreementService>();
+    builder.Services.AddScoped<ISubrogationRecoveryService, SubrogationRecoveryService>();
+    builder.Services.AddScoped<IThirdPartyService, ThirdPartyService>();
+    builder.Services.AddScoped<IDocumentService, DocumentService>();
+
+// apply the service resolver
+builder.Services.AddScoped<IServiceResolver, ServiceResolver>();
+
+builder.Services.AddSingleton<ApplicationTelemetry>();
+
+builder.Services
+    .AddOpenTelemetry()
+    .WithMetrics(metrics =>
+    {
+        metrics.AddMeter("Harbormaster.Application");
+
+        metrics.AddPrometheusExporter();
+    });
 
 var app = builder.Build();
+
+app.MapPrometheusScrapingEndpoint();
+
 
 // Health endpoint
 app.MapHealthChecks("/health");
@@ -202,35 +219,35 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 
-app.MapInsurerEndpoints();
-app.MapInsuranceProductEndpoints();
-app.MapCoverageDefinitionEndpoints();
-app.MapDistributorEndpoints();
-app.MapAgentEndpoints();
-app.MapCustomerEndpoints();
-app.MapApplicationEndpoints();
-app.MapQuoteEndpoints();
-app.MapUnderwritingDecisionEndpoints();
-app.MapUnderwriterEndpoints();
-app.MapPolicyEndpoints();
-app.MapEndorsementEndpoints();
-app.MapPolicyCoverageEndpoints();
-app.MapInsuredObjectEndpoints();
-app.MapBeneficiaryEndpoints();
-app.MapBillingAccountEndpoints();
-app.MapInvoiceEndpoints();
-app.MapPaymentEndpoints();
-app.MapClaimEndpoints();
-app.MapIncidentEndpoints();
-app.MapExposureEndpoints();
-app.MapAdjusterEndpoints();
-app.MapClaimReserveEndpoints();
-app.MapClaimPaymentEndpoints();
-app.MapServiceProvider_Endpoints();
-app.MapReinsuranceAgreementEndpoints();
-app.MapSubrogationRecoveryEndpoints();
-app.MapThirdPartyEndpoints();
-app.MapDocumentEndpoints();
+    app.MapInsurerEndpoints();
+    app.MapInsuranceProductEndpoints();
+    app.MapCoverageDefinitionEndpoints();
+    app.MapDistributorEndpoints();
+    app.MapAgentEndpoints();
+    app.MapCustomerEndpoints();
+    app.MapApplicationEndpoints();
+    app.MapQuoteEndpoints();
+    app.MapUnderwritingDecisionEndpoints();
+    app.MapUnderwriterEndpoints();
+    app.MapPolicyEndpoints();
+    app.MapEndorsementEndpoints();
+    app.MapPolicyCoverageEndpoints();
+    app.MapInsuredObjectEndpoints();
+    app.MapBeneficiaryEndpoints();
+    app.MapBillingAccountEndpoints();
+    app.MapInvoiceEndpoints();
+    app.MapPaymentEndpoints();
+    app.MapClaimEndpoints();
+    app.MapIncidentEndpoints();
+    app.MapExposureEndpoints();
+    app.MapAdjusterEndpoints();
+    app.MapClaimReserveEndpoints();
+    app.MapClaimPaymentEndpoints();
+    app.MapServiceProvider_Endpoints();
+    app.MapReinsuranceAgreementEndpoints();
+    app.MapSubrogationRecoveryEndpoints();
+    app.MapThirdPartyEndpoints();
+    app.MapDocumentEndpoints();
 
 app.Run();
 

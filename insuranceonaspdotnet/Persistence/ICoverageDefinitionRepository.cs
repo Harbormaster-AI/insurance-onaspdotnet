@@ -1,4 +1,5 @@
 using insuranceonaspdotnet.Domain;
+using insuranceonaspdotnet.Contracts;
 
 namespace insuranceonaspdotnet.Persistence;
 
@@ -9,4 +10,6 @@ public interface ICoverageDefinitionRepository
     Task AddAsync(CoverageDefinition coverageDefinition, CancellationToken cancellationToken);
     Task UpdateAsync(CoverageDefinition coverageDefinition, CancellationToken cancellationToken);
     Task DeleteAsync(CoverageDefinition coverageDefinition, CancellationToken cancellationToken);
+
+
 }

@@ -1,4 +1,5 @@
 using insuranceonaspdotnet.Domain;
+using insuranceonaspdotnet.Contracts;
 
 namespace insuranceonaspdotnet.Persistence;
 
@@ -9,4 +10,8 @@ public interface IServiceProvider_Repository
     Task AddAsync(ServiceProvider_ serviceProvider_, CancellationToken cancellationToken);
     Task UpdateAsync(ServiceProvider_ serviceProvider_, CancellationToken cancellationToken);
     Task DeleteAsync(ServiceProvider_ serviceProvider_, CancellationToken cancellationToken);
+
+    Task AddToClaimsAsync( MultipleAssociationRequest request, CancellationToken cancellationToken);
+    Task RemoveFromClaimsAsync( MultipleAssociationRequest request, CancellationToken cancellationToken);
+
 }

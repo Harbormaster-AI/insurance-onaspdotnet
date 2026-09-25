@@ -1,4 +1,7 @@
+
+using insuranceonaspdotnet.Contracts;
 using insuranceonaspdotnet.Domain;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace insuranceonaspdotnet.Persistence;
@@ -46,4 +49,5 @@ public class BeneficiaryRepository : IBeneficiaryRepository
         _db.Beneficiarys.Remove(beneficiary);
         await _db.SaveChangesAsync(cancellationToken);
     }
+
 }

@@ -1,6 +1,8 @@
+
 using insuranceonaspdotnet.Domain;
 using insuranceonaspdotnet.Persistence;
 using insuranceonaspdotnet.Contracts;
+using insuranceonaspdotnet.Telemetry;
 
 namespace insuranceonaspdotnet.Service;
 
@@ -11,7 +13,6 @@ public interface ICoverageDefinitionService {
     Task<CoverageDefinition?> Get(IdentifierRequest identifier, CancellationToken cancellationToken);
     Task<IReadOnlyList<CoverageDefinition>> GetAll(CancellationToken cancellationToken);
     Task<bool> Delete(IdentifierRequest identifier, CancellationToken cancellationToken);
-
     // ------------------------------
     // Single Associations
     // -------------------------------
@@ -23,27 +24,38 @@ public interface ICoverageDefinitionService {
 
 public class CoverageDefinitionService : ICoverageDefinitionService
 {
+    private readonly ApplicationTelemetry _telemetry;
     private readonly ICoverageDefinitionRepository _repository;
     private readonly ILogger<CoverageDefinitionService> _logger;
+    private readonly IServiceResolver _serviceResolver;
+
 
     public CoverageDefinitionService(
-        ICoverageDefinitionRepository repository, ILogger<CoverageDefinitionService> logger )
+        ApplicationTelemetry telemetry,
+        ICoverageDefinitionRepository repository,
+        ILogger<CoverageDefinitionService> logger,
+        IServiceResolver serviceResolver)
     {
+        _telemetry = telemetry;
         _repository = repository;
         _logger = logger;
+        _serviceResolver = serviceResolver;
     }
-
 
     public async Task Create(CoverageDefinition model, CancellationToken cancellationToken)
     {
-
-         try
+        try
         {
-            await _repository.AddAsync(model, cancellationToken);
+            await _telemetry.Execute(
+                "CoverageDefinition",
+                "CreateCoverageDefinition",
+                () => _repository.AddAsync(model, cancellationToken));
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Unexpected Error: {ex.Message}");
+            _logger.LogError(
+                    ex,
+                    "Unexpected error while creating Transaction.");
         }
     }
 
@@ -61,11 +73,16 @@ public class CoverageDefinitionService : ICoverageDefinitionService
             existing.AsMandatory = model.AsMandatory;
             existing.CoverageType = model.CoverageType;
 
-            await _repository.UpdateAsync(existing, cancellationToken);
+            await _telemetry.Execute(
+                "CoverageDefinition",
+                "UpdateCoverageDefinition",
+                () => _repository.UpdateAsync(existing, cancellationToken));
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Unexpected Error: {ex.Message}");
+            _logger.LogError(
+                    ex,
+                    "Unexpected error while creating Transaction.");
             return false;
         }
         return true;
@@ -87,21 +104,71 @@ public class CoverageDefinitionService : ICoverageDefinitionService
 
         try
         {
-            await _repository.DeleteAsync(existing, cancellationToken);
+            await _telemetry.Execute(
+                "CoverageDefinition",
+                "UpdateCoverageDefinition",
+                () => _repository.DeleteAsync(existing, cancellationToken));
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Unexpected Error: {ex.Message}");
+            _logger.LogError(
+                    ex,
+                    "Unexpected error while creating Transaction.");
             return false;
         }
         return true;
-
     }
 
     public async Task<bool> AssignProduct(AssociationRequest request, CancellationToken cancellationToken) {
+
+        var parent = await _repository.GetByIdAsync(request.ParentId, cancellationToken);
+        if (parent is null)
+        {
+            _logger.LogError("No CoverageDefinition found using Id {ParentId}", request.ParentId);
+            return false;
+        }
+
+        try
+        {
+            var childRequest = new IdentifierRequest
+            {
+                Id = request.ChildId,
+            };
+
+            var child = await _serviceResolver.Get<InsuranceProductService>().Get(childRequest, cancellationToken);
+            parent.Product = child;
+            await Update( parent, cancellationToken );
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(
+                    ex,
+                    "Unexpected error while creating Transaction.");
+            return false;
+        }
         return true;
     }
+
     public async Task<bool> UnassignProduct(AssociationRequest request, CancellationToken cancellationToken) {
+        var parent = await _repository.GetByIdAsync(request.ParentId, cancellationToken);
+        if (parent is null)
+        {
+            _logger.LogError("No CoverageDefinition found using Id {ParentId}", request.ParentId);
+            return false;
+        }
+
+        try
+        {
+            parent.Product = null;
+            await Update( parent, cancellationToken );
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(
+                    ex,
+                    "Unexpected error while creating Transaction.");
+            return false;
+        }
         return true;
     }
 

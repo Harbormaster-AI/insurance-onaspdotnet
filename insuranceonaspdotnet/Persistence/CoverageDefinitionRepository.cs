@@ -1,4 +1,7 @@
+
+using insuranceonaspdotnet.Contracts;
 using insuranceonaspdotnet.Domain;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace insuranceonaspdotnet.Persistence;
@@ -44,4 +47,5 @@ public class CoverageDefinitionRepository : ICoverageDefinitionRepository
         _db.CoverageDefinitions.Remove(coverageDefinition);
         await _db.SaveChangesAsync(cancellationToken);
     }
+
 }

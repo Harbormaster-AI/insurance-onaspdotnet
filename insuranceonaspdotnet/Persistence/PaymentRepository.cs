@@ -1,4 +1,7 @@
+
+using insuranceonaspdotnet.Contracts;
 using insuranceonaspdotnet.Domain;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace insuranceonaspdotnet.Persistence;
@@ -48,4 +51,5 @@ public class PaymentRepository : IPaymentRepository
         _db.Payments.Remove(payment);
         await _db.SaveChangesAsync(cancellationToken);
     }
+
 }

@@ -1,4 +1,7 @@
+
+using insuranceonaspdotnet.Contracts;
 using insuranceonaspdotnet.Domain;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace insuranceonaspdotnet.Persistence;
@@ -46,4 +49,41 @@ public class InvoiceRepository : IInvoiceRepository
         _db.Invoices.Remove(invoice);
         await _db.SaveChangesAsync(cancellationToken);
     }
+
+
+    public async Task AddToPaymentsAsync(
+        MultipleAssociationRequest request,
+        CancellationToken cancellationToken)
+    {
+        await _db.Payments
+            .Where(payment =>
+                request.ChildIds.Contains(payment.Id))
+            .ExecuteUpdateAsync(setters =>
+                setters.SetProperty(
+                    payment =>
+                        EF.Property<Guid?>(
+                            payment,
+                            "Document_Id"),
+                    request.ParentId));
+    }
+
+    public async Task RemoveFromPaymentsAsync(
+        MultipleAssociationRequest request,
+        CancellationToken cancellationToken)
+    {
+        await _db.Payments
+            .Where(payment =>
+                request.ChildIds.Contains(payment.Id) &&
+                EF.Property<Guid?>(
+                    payment,
+                    "Document_Id") == request.ParentId)
+            .ExecuteUpdateAsync(setters =>
+                setters.SetProperty(
+                    payment =>
+                        EF.Property<Guid?>(
+                            payment,
+                            "Document_Id"),
+                    (Guid?)null));
+    }
+
 }

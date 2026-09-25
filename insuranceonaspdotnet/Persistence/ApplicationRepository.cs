@@ -1,4 +1,7 @@
+
+using insuranceonaspdotnet.Contracts;
 using insuranceonaspdotnet.Domain;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace insuranceonaspdotnet.Persistence;
@@ -50,4 +53,41 @@ public class ApplicationRepository : IApplicationRepository
         _db.Applications.Remove(application);
         await _db.SaveChangesAsync(cancellationToken);
     }
+
+
+    public async Task AddToQuotesAsync(
+        MultipleAssociationRequest request,
+        CancellationToken cancellationToken)
+    {
+        await _db.Quotes
+            .Where(quote =>
+                request.ChildIds.Contains(quote.Id))
+            .ExecuteUpdateAsync(setters =>
+                setters.SetProperty(
+                    quote =>
+                        EF.Property<Guid?>(
+                            quote,
+                            "Document_Id"),
+                    request.ParentId));
+    }
+
+    public async Task RemoveFromQuotesAsync(
+        MultipleAssociationRequest request,
+        CancellationToken cancellationToken)
+    {
+        await _db.Quotes
+            .Where(quote =>
+                request.ChildIds.Contains(quote.Id) &&
+                EF.Property<Guid?>(
+                    quote,
+                    "Document_Id") == request.ParentId)
+            .ExecuteUpdateAsync(setters =>
+                setters.SetProperty(
+                    quote =>
+                        EF.Property<Guid?>(
+                            quote,
+                            "Document_Id"),
+                    (Guid?)null));
+    }
+
 }

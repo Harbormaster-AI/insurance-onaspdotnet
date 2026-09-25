@@ -1,4 +1,5 @@
 using insuranceonaspdotnet.Domain;
+using insuranceonaspdotnet.Contracts;
 
 namespace insuranceonaspdotnet.Persistence;
 
@@ -9,4 +10,6 @@ public interface IClaimPaymentRepository
     Task AddAsync(ClaimPayment claimPayment, CancellationToken cancellationToken);
     Task UpdateAsync(ClaimPayment claimPayment, CancellationToken cancellationToken);
     Task DeleteAsync(ClaimPayment claimPayment, CancellationToken cancellationToken);
+
+
 }

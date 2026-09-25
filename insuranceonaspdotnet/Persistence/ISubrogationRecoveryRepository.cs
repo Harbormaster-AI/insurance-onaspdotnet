@@ -1,4 +1,5 @@
 using insuranceonaspdotnet.Domain;
+using insuranceonaspdotnet.Contracts;
 
 namespace insuranceonaspdotnet.Persistence;
 
@@ -9,4 +10,6 @@ public interface ISubrogationRecoveryRepository
     Task AddAsync(SubrogationRecovery subrogationRecovery, CancellationToken cancellationToken);
     Task UpdateAsync(SubrogationRecovery subrogationRecovery, CancellationToken cancellationToken);
     Task DeleteAsync(SubrogationRecovery subrogationRecovery, CancellationToken cancellationToken);
+
+
 }

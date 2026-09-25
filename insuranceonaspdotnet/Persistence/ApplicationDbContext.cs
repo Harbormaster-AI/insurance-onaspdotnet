@@ -11,35 +11,35 @@ public class ApplicationDbContext : DbContext
     {
     }
 
-public DbSet<Insurer> Insurers => Set<Insurer>();
-public DbSet<InsuranceProduct> InsuranceProducts => Set<InsuranceProduct>();
-public DbSet<CoverageDefinition> CoverageDefinitions => Set<CoverageDefinition>();
-public DbSet<Distributor> Distributors => Set<Distributor>();
-public DbSet<Agent> Agents => Set<Agent>();
-public DbSet<Customer> Customers => Set<Customer>();
-public DbSet<Application> Applications => Set<Application>();
-public DbSet<Quote> Quotes => Set<Quote>();
-public DbSet<UnderwritingDecision> UnderwritingDecisions => Set<UnderwritingDecision>();
-public DbSet<Underwriter> Underwriters => Set<Underwriter>();
-public DbSet<Policy> Policys => Set<Policy>();
-public DbSet<Endorsement> Endorsements => Set<Endorsement>();
-public DbSet<PolicyCoverage> PolicyCoverages => Set<PolicyCoverage>();
-public DbSet<InsuredObject> InsuredObjects => Set<InsuredObject>();
-public DbSet<Beneficiary> Beneficiarys => Set<Beneficiary>();
-public DbSet<BillingAccount> BillingAccounts => Set<BillingAccount>();
-public DbSet<Invoice> Invoices => Set<Invoice>();
-public DbSet<Payment> Payments => Set<Payment>();
-public DbSet<Claim> Claims => Set<Claim>();
-public DbSet<Incident> Incidents => Set<Incident>();
-public DbSet<Exposure> Exposures => Set<Exposure>();
-public DbSet<Adjuster> Adjusters => Set<Adjuster>();
-public DbSet<ClaimReserve> ClaimReserves => Set<ClaimReserve>();
-public DbSet<ClaimPayment> ClaimPayments => Set<ClaimPayment>();
-public DbSet<ServiceProvider_> ServiceProvider_s => Set<ServiceProvider_>();
-public DbSet<ReinsuranceAgreement> ReinsuranceAgreements => Set<ReinsuranceAgreement>();
-public DbSet<SubrogationRecovery> SubrogationRecoverys => Set<SubrogationRecovery>();
-public DbSet<ThirdParty> ThirdPartys => Set<ThirdParty>();
-public DbSet<Document> Documents => Set<Document>();
+    public DbSet<Insurer> Insurers => Set<Insurer>();
+    public DbSet<InsuranceProduct> InsuranceProducts => Set<InsuranceProduct>();
+    public DbSet<CoverageDefinition> CoverageDefinitions => Set<CoverageDefinition>();
+    public DbSet<Distributor> Distributors => Set<Distributor>();
+    public DbSet<Agent> Agents => Set<Agent>();
+    public DbSet<Customer> Customers => Set<Customer>();
+    public DbSet<Application> Applications => Set<Application>();
+    public DbSet<Quote> Quotes => Set<Quote>();
+    public DbSet<UnderwritingDecision> UnderwritingDecisions => Set<UnderwritingDecision>();
+    public DbSet<Underwriter> Underwriters => Set<Underwriter>();
+    public DbSet<Policy> Policys => Set<Policy>();
+    public DbSet<Endorsement> Endorsements => Set<Endorsement>();
+    public DbSet<PolicyCoverage> PolicyCoverages => Set<PolicyCoverage>();
+    public DbSet<InsuredObject> InsuredObjects => Set<InsuredObject>();
+    public DbSet<Beneficiary> Beneficiarys => Set<Beneficiary>();
+    public DbSet<BillingAccount> BillingAccounts => Set<BillingAccount>();
+    public DbSet<Invoice> Invoices => Set<Invoice>();
+    public DbSet<Payment> Payments => Set<Payment>();
+    public DbSet<Claim> Claims => Set<Claim>();
+    public DbSet<Incident> Incidents => Set<Incident>();
+    public DbSet<Exposure> Exposures => Set<Exposure>();
+    public DbSet<Adjuster> Adjusters => Set<Adjuster>();
+    public DbSet<ClaimReserve> ClaimReserves => Set<ClaimReserve>();
+    public DbSet<ClaimPayment> ClaimPayments => Set<ClaimPayment>();
+    public DbSet<ServiceProvider_> ServiceProvider_s => Set<ServiceProvider_>();
+    public DbSet<ReinsuranceAgreement> ReinsuranceAgreements => Set<ReinsuranceAgreement>();
+    public DbSet<SubrogationRecovery> SubrogationRecoverys => Set<SubrogationRecovery>();
+    public DbSet<ThirdParty> ThirdPartys => Set<ThirdParty>();
+    public DbSet<Document> Documents => Set<Document>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -50,31 +50,31 @@ public DbSet<Document> Documents => Set<Document>();
         modelBuilder.Entity<InsuranceProduct>()
             .HasOne<Insurer>()
             .WithMany(parent => parent.Products)
-            .HasForeignKey("Products_Id");
+            .HasForeignKey("Insurer_Id");
 
         // Insurer has one or more DistributionPartners of type Distributor
         modelBuilder.Entity<Distributor>()
             .HasOne<Insurer>()
             .WithMany(parent => parent.DistributionPartners)
-            .HasForeignKey("DistributionPartners_Id");
+            .HasForeignKey("Insurer_Id");
 
         // Insurer has one or more Policies of type Policy
         modelBuilder.Entity<Policy>()
             .HasOne<Insurer>()
             .WithMany(parent => parent.Policies)
-            .HasForeignKey("Policies_Id");
+            .HasForeignKey("Insurer_Id");
 
         // Insurer has one or more Claims of type Claim
         modelBuilder.Entity<Claim>()
             .HasOne<Insurer>()
             .WithMany(parent => parent.Claims)
-            .HasForeignKey("Claims_Id");
+            .HasForeignKey("Insurer_Id");
 
         // Insurer has one or more ReinsuranceAgreements of type ReinsuranceAgreement
         modelBuilder.Entity<ReinsuranceAgreement>()
             .HasOne<Insurer>()
             .WithMany(parent => parent.ReinsuranceAgreements)
-            .HasForeignKey("ReinsuranceAgreements_Id");
+            .HasForeignKey("Insurer_Id");
 
         // InsuranceProduct has one Insurer of type Insurer
         modelBuilder.Entity<InsuranceProduct>()
@@ -87,7 +87,7 @@ public DbSet<Document> Documents => Set<Document>();
         modelBuilder.Entity<CoverageDefinition>()
             .HasOne<InsuranceProduct>()
             .WithMany(parent => parent.CoverageDefinitions)
-            .HasForeignKey("CoverageDefinitions_Id");
+            .HasForeignKey("InsuranceProduct_Id");
 
         // CoverageDefinition has one Product of type InsuranceProduct
         modelBuilder.Entity<CoverageDefinition>()
@@ -101,19 +101,19 @@ public DbSet<Document> Documents => Set<Document>();
         modelBuilder.Entity<Insurer>()
             .HasOne<Distributor>()
             .WithMany(parent => parent.Insurers)
-            .HasForeignKey("Insurers_Id");
+            .HasForeignKey("Distributor_Id");
 
         // Distributor has one or more Agents of type Agent
         modelBuilder.Entity<Agent>()
             .HasOne<Distributor>()
             .WithMany(parent => parent.Agents)
-            .HasForeignKey("Agents_Id");
+            .HasForeignKey("Distributor_Id");
 
         // Distributor has one or more Policies of type Policy
         modelBuilder.Entity<Policy>()
             .HasOne<Distributor>()
             .WithMany(parent => parent.Policies)
-            .HasForeignKey("Policies_Id");
+            .HasForeignKey("Distributor_Id");
 
         // Agent has one Distributor of type Distributor
         modelBuilder.Entity<Agent>()
@@ -126,44 +126,44 @@ public DbSet<Document> Documents => Set<Document>();
         modelBuilder.Entity<Policy>()
             .HasOne<Agent>()
             .WithMany(parent => parent.Policies)
-            .HasForeignKey("Policies_Id");
+            .HasForeignKey("Agent_Id");
 
         // Agent has one or more Customers of type Customer
         modelBuilder.Entity<Customer>()
             .HasOne<Agent>()
             .WithMany(parent => parent.Customers)
-            .HasForeignKey("Customers_Id");
+            .HasForeignKey("Agent_Id");
 
 
         // Customer has one or more Applications of type Application
         modelBuilder.Entity<Application>()
             .HasOne<Customer>()
             .WithMany(parent => parent.Applications)
-            .HasForeignKey("Applications_Id");
+            .HasForeignKey("Customer_Id");
 
         // Customer has one or more Policies of type Policy
         modelBuilder.Entity<Policy>()
             .HasOne<Customer>()
             .WithMany(parent => parent.Policies)
-            .HasForeignKey("Policies_Id");
+            .HasForeignKey("Customer_Id");
 
         // Customer has one or more Claims of type Claim
         modelBuilder.Entity<Claim>()
             .HasOne<Customer>()
             .WithMany(parent => parent.Claims)
-            .HasForeignKey("Claims_Id");
+            .HasForeignKey("Customer_Id");
 
         // Customer has one or more Agents of type Agent
         modelBuilder.Entity<Agent>()
             .HasOne<Customer>()
             .WithMany(parent => parent.Agents)
-            .HasForeignKey("Agents_Id");
+            .HasForeignKey("Customer_Id");
 
         // Customer has one or more Beneficiaries of type Beneficiary
         modelBuilder.Entity<Beneficiary>()
             .HasOne<Customer>()
             .WithMany(parent => parent.Beneficiaries)
-            .HasForeignKey("Beneficiaries_Id");
+            .HasForeignKey("Customer_Id");
 
         // Application has one Customer of type Customer
         modelBuilder.Entity<Application>()
@@ -194,7 +194,7 @@ public DbSet<Document> Documents => Set<Document>();
         modelBuilder.Entity<Quote>()
             .HasOne<Application>()
             .WithMany(parent => parent.Quotes)
-            .HasForeignKey("Quotes_Id");
+            .HasForeignKey("Application_Id");
 
         // Quote has one Application of type Application
         modelBuilder.Entity<Quote>()
@@ -213,7 +213,7 @@ public DbSet<Document> Documents => Set<Document>();
         modelBuilder.Entity<UnderwritingDecision>()
             .HasOne<Quote>()
             .WithMany(parent => parent.UnderwritingDecisions)
-            .HasForeignKey("UnderwritingDecisions_Id");
+            .HasForeignKey("Quote_Id");
 
         // UnderwritingDecision has one Quote of type Quote
         modelBuilder.Entity<UnderwritingDecision>()
@@ -239,7 +239,7 @@ public DbSet<Document> Documents => Set<Document>();
         modelBuilder.Entity<UnderwritingDecision>()
             .HasOne<Underwriter>()
             .WithMany(parent => parent.Decisions)
-            .HasForeignKey("Decisions_Id");
+            .HasForeignKey("Underwriter_Id");
 
         // Policy has one Insurer of type Insurer
         modelBuilder.Entity<Policy>()
@@ -276,37 +276,37 @@ public DbSet<Document> Documents => Set<Document>();
         modelBuilder.Entity<PolicyCoverage>()
             .HasOne<Policy>()
             .WithMany(parent => parent.Coverages)
-            .HasForeignKey("Coverages_Id");
+            .HasForeignKey("Policy_Id");
 
         // Policy has one or more InsuredObjects of type InsuredObject
         modelBuilder.Entity<InsuredObject>()
             .HasOne<Policy>()
             .WithMany(parent => parent.InsuredObjects)
-            .HasForeignKey("InsuredObjects_Id");
+            .HasForeignKey("Policy_Id");
 
         // Policy has one or more Endorsements of type Endorsement
         modelBuilder.Entity<Endorsement>()
             .HasOne<Policy>()
             .WithMany(parent => parent.Endorsements)
-            .HasForeignKey("Endorsements_Id");
+            .HasForeignKey("Policy_Id");
 
         // Policy has one or more Beneficiaries of type Beneficiary
         modelBuilder.Entity<Beneficiary>()
             .HasOne<Policy>()
             .WithMany(parent => parent.Beneficiaries)
-            .HasForeignKey("Beneficiaries_Id");
+            .HasForeignKey("Policy_Id");
 
         // Policy has one or more Claims of type Claim
         modelBuilder.Entity<Claim>()
             .HasOne<Policy>()
             .WithMany(parent => parent.Claims)
-            .HasForeignKey("Claims_Id");
+            .HasForeignKey("Policy_Id");
 
         // Policy has one or more ReinsuranceAgreements of type ReinsuranceAgreement
         modelBuilder.Entity<ReinsuranceAgreement>()
             .HasOne<Policy>()
             .WithMany(parent => parent.ReinsuranceAgreements)
-            .HasForeignKey("ReinsuranceAgreements_Id");
+            .HasForeignKey("Policy_Id");
 
         // Endorsement has one Policy of type Policy
         modelBuilder.Entity<Endorsement>()
@@ -326,7 +326,7 @@ public DbSet<Document> Documents => Set<Document>();
         modelBuilder.Entity<InsuredObject>()
             .HasOne<PolicyCoverage>()
             .WithMany(parent => parent.InsuredObjects)
-            .HasForeignKey("InsuredObjects_Id");
+            .HasForeignKey("PolicyCoverage_Id");
 
         // InsuredObject has one Policy of type Policy
         modelBuilder.Entity<InsuredObject>()
@@ -339,7 +339,7 @@ public DbSet<Document> Documents => Set<Document>();
         modelBuilder.Entity<PolicyCoverage>()
             .HasOne<InsuredObject>()
             .WithMany(parent => parent.Coverages)
-            .HasForeignKey("Coverages_Id");
+            .HasForeignKey("InsuredObject_Id");
 
         // Beneficiary has one Policy of type Policy
         modelBuilder.Entity<Beneficiary>()
@@ -365,19 +365,19 @@ public DbSet<Document> Documents => Set<Document>();
         modelBuilder.Entity<Policy>()
             .HasOne<BillingAccount>()
             .WithMany(parent => parent.Policies)
-            .HasForeignKey("Policies_Id");
+            .HasForeignKey("BillingAccount_Id");
 
         // BillingAccount has one or more Invoices of type Invoice
         modelBuilder.Entity<Invoice>()
             .HasOne<BillingAccount>()
             .WithMany(parent => parent.Invoices)
-            .HasForeignKey("Invoices_Id");
+            .HasForeignKey("BillingAccount_Id");
 
         // BillingAccount has one or more Payments of type Payment
         modelBuilder.Entity<Payment>()
             .HasOne<BillingAccount>()
             .WithMany(parent => parent.Payments)
-            .HasForeignKey("Payments_Id");
+            .HasForeignKey("BillingAccount_Id");
 
         // Invoice has one BillingAccount of type BillingAccount
         modelBuilder.Entity<Invoice>()
@@ -396,7 +396,7 @@ public DbSet<Document> Documents => Set<Document>();
         modelBuilder.Entity<Payment>()
             .HasOne<Invoice>()
             .WithMany(parent => parent.Payments)
-            .HasForeignKey("Payments_Id");
+            .HasForeignKey("Invoice_Id");
 
         // Payment has one Invoice of type Invoice
         modelBuilder.Entity<Payment>()
@@ -446,31 +446,31 @@ public DbSet<Document> Documents => Set<Document>();
         modelBuilder.Entity<Exposure>()
             .HasOne<Claim>()
             .WithMany(parent => parent.Exposures)
-            .HasForeignKey("Exposures_Id");
+            .HasForeignKey("Claim_Id");
 
         // Claim has one or more Reserves of type ClaimReserve
         modelBuilder.Entity<ClaimReserve>()
             .HasOne<Claim>()
             .WithMany(parent => parent.Reserves)
-            .HasForeignKey("Reserves_Id");
+            .HasForeignKey("Claim_Id");
 
         // Claim has one or more ClaimPayments of type ClaimPayment
         modelBuilder.Entity<ClaimPayment>()
             .HasOne<Claim>()
             .WithMany(parent => parent.ClaimPayments)
-            .HasForeignKey("ClaimPayments_Id");
+            .HasForeignKey("Claim_Id");
 
         // Claim has one or more ServiceProviders of type ServiceProvider_
         modelBuilder.Entity<ServiceProvider_>()
             .HasOne<Claim>()
             .WithMany(parent => parent.ServiceProviders)
-            .HasForeignKey("ServiceProviders_Id");
+            .HasForeignKey("Claim_Id");
 
         // Claim has one or more Subrogations of type SubrogationRecovery
         modelBuilder.Entity<SubrogationRecovery>()
             .HasOne<Claim>()
             .WithMany(parent => parent.Subrogations)
-            .HasForeignKey("Subrogations_Id");
+            .HasForeignKey("Claim_Id");
 
         // Incident has one Claim of type Claim
         modelBuilder.Entity<Incident>()
@@ -483,7 +483,7 @@ public DbSet<Document> Documents => Set<Document>();
         modelBuilder.Entity<InsuredObject>()
             .HasOne<Incident>()
             .WithMany(parent => parent.InsuredObjects)
-            .HasForeignKey("InsuredObjects_Id");
+            .HasForeignKey("Incident_Id");
 
         // Exposure has one Claim of type Claim
         modelBuilder.Entity<Exposure>()
@@ -508,26 +508,26 @@ public DbSet<Document> Documents => Set<Document>();
         modelBuilder.Entity<ClaimReserve>()
             .HasOne<Exposure>()
             .WithMany(parent => parent.Reserves)
-            .HasForeignKey("Reserves_Id");
+            .HasForeignKey("Exposure_Id");
 
         // Exposure has one or more Payments of type ClaimPayment
         modelBuilder.Entity<ClaimPayment>()
             .HasOne<Exposure>()
             .WithMany(parent => parent.Payments)
-            .HasForeignKey("Payments_Id");
+            .HasForeignKey("Exposure_Id");
 
 
         // Adjuster has one or more Claims of type Claim
         modelBuilder.Entity<Claim>()
             .HasOne<Adjuster>()
             .WithMany(parent => parent.Claims)
-            .HasForeignKey("Claims_Id");
+            .HasForeignKey("Adjuster_Id");
 
         // Adjuster has one or more ServiceProviders of type ServiceProvider_
         modelBuilder.Entity<ServiceProvider_>()
             .HasOne<Adjuster>()
             .WithMany(parent => parent.ServiceProviders)
-            .HasForeignKey("ServiceProviders_Id");
+            .HasForeignKey("Adjuster_Id");
 
         // ClaimReserve has one Claim of type Claim
         modelBuilder.Entity<ClaimReserve>()
@@ -578,7 +578,7 @@ public DbSet<Document> Documents => Set<Document>();
         modelBuilder.Entity<Claim>()
             .HasOne<ServiceProvider_>()
             .WithMany(parent => parent.Claims)
-            .HasForeignKey("Claims_Id");
+            .HasForeignKey("ServiceProvider__Id");
 
         // ReinsuranceAgreement has one Insurer of type Insurer
         modelBuilder.Entity<ReinsuranceAgreement>()
@@ -591,7 +591,7 @@ public DbSet<Document> Documents => Set<Document>();
         modelBuilder.Entity<Policy>()
             .HasOne<ReinsuranceAgreement>()
             .WithMany(parent => parent.Policies)
-            .HasForeignKey("Policies_Id");
+            .HasForeignKey("ReinsuranceAgreement_Id");
 
         // SubrogationRecovery has one Claim of type Claim
         modelBuilder.Entity<SubrogationRecovery>()
@@ -617,7 +617,7 @@ public DbSet<Document> Documents => Set<Document>();
         modelBuilder.Entity<SubrogationRecovery>()
             .HasOne<ThirdParty>()
             .WithMany(parent => parent.Subrogations)
-            .HasForeignKey("Subrogations_Id");
+            .HasForeignKey("ThirdParty_Id");
 
         // Document has one Policy of type Policy
         modelBuilder.Entity<Document>()

@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace insuranceonaspdotnet.Domain;
 
+
     [ComplexType]
     public record PolicyNumber(
     string Value

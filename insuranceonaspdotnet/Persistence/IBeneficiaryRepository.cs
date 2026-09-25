@@ -1,4 +1,5 @@
 using insuranceonaspdotnet.Domain;
+using insuranceonaspdotnet.Contracts;
 
 namespace insuranceonaspdotnet.Persistence;
 
@@ -9,4 +10,6 @@ public interface IBeneficiaryRepository
     Task AddAsync(Beneficiary beneficiary, CancellationToken cancellationToken);
     Task UpdateAsync(Beneficiary beneficiary, CancellationToken cancellationToken);
     Task DeleteAsync(Beneficiary beneficiary, CancellationToken cancellationToken);
+
+
 }

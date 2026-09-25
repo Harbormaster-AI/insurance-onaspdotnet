@@ -1,4 +1,5 @@
 using insuranceonaspdotnet.Domain;
+using insuranceonaspdotnet.Contracts;
 
 namespace insuranceonaspdotnet.Persistence;
 
@@ -9,4 +10,6 @@ public interface IUnderwritingDecisionRepository
     Task AddAsync(UnderwritingDecision underwritingDecision, CancellationToken cancellationToken);
     Task UpdateAsync(UnderwritingDecision underwritingDecision, CancellationToken cancellationToken);
     Task DeleteAsync(UnderwritingDecision underwritingDecision, CancellationToken cancellationToken);
+
+
 }

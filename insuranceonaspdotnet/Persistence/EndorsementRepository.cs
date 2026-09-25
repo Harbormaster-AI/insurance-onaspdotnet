@@ -1,4 +1,7 @@
+
+using insuranceonaspdotnet.Contracts;
 using insuranceonaspdotnet.Domain;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace insuranceonaspdotnet.Persistence;
@@ -44,4 +47,5 @@ public class EndorsementRepository : IEndorsementRepository
         _db.Endorsements.Remove(endorsement);
         await _db.SaveChangesAsync(cancellationToken);
     }
+
 }

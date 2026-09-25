@@ -1,4 +1,7 @@
+
+using insuranceonaspdotnet.Contracts;
 using insuranceonaspdotnet.Domain;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace insuranceonaspdotnet.Persistence;
@@ -44,4 +47,41 @@ public class ReinsuranceAgreementRepository : IReinsuranceAgreementRepository
         _db.ReinsuranceAgreements.Remove(reinsuranceAgreement);
         await _db.SaveChangesAsync(cancellationToken);
     }
+
+
+    public async Task AddToPoliciesAsync(
+        MultipleAssociationRequest request,
+        CancellationToken cancellationToken)
+    {
+        await _db.Policys
+            .Where(policy =>
+                request.ChildIds.Contains(policy.Id))
+            .ExecuteUpdateAsync(setters =>
+                setters.SetProperty(
+                    policy =>
+                        EF.Property<Guid?>(
+                            policy,
+                            "Document_Id"),
+                    request.ParentId));
+    }
+
+    public async Task RemoveFromPoliciesAsync(
+        MultipleAssociationRequest request,
+        CancellationToken cancellationToken)
+    {
+        await _db.Policys
+            .Where(policy =>
+                request.ChildIds.Contains(policy.Id) &&
+                EF.Property<Guid?>(
+                    policy,
+                    "Document_Id") == request.ParentId)
+            .ExecuteUpdateAsync(setters =>
+                setters.SetProperty(
+                    policy =>
+                        EF.Property<Guid?>(
+                            policy,
+                            "Document_Id"),
+                    (Guid?)null));
+    }
+
 }

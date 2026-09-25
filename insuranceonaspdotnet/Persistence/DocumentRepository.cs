@@ -1,4 +1,7 @@
+
+using insuranceonaspdotnet.Contracts;
 using insuranceonaspdotnet.Domain;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace insuranceonaspdotnet.Persistence;
@@ -50,4 +53,5 @@ public class DocumentRepository : IDocumentRepository
         _db.Documents.Remove(document);
         await _db.SaveChangesAsync(cancellationToken);
     }
+
 }

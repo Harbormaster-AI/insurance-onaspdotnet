@@ -1,4 +1,5 @@
 using insuranceonaspdotnet.Domain;
+using insuranceonaspdotnet.Contracts;
 
 namespace insuranceonaspdotnet.Persistence;
 
@@ -9,4 +10,8 @@ public interface IReinsuranceAgreementRepository
     Task AddAsync(ReinsuranceAgreement reinsuranceAgreement, CancellationToken cancellationToken);
     Task UpdateAsync(ReinsuranceAgreement reinsuranceAgreement, CancellationToken cancellationToken);
     Task DeleteAsync(ReinsuranceAgreement reinsuranceAgreement, CancellationToken cancellationToken);
+
+    Task AddToPoliciesAsync( MultipleAssociationRequest request, CancellationToken cancellationToken);
+    Task RemoveFromPoliciesAsync( MultipleAssociationRequest request, CancellationToken cancellationToken);
+
 }

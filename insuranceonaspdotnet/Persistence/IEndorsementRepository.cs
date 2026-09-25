@@ -1,4 +1,5 @@
 using insuranceonaspdotnet.Domain;
+using insuranceonaspdotnet.Contracts;
 
 namespace insuranceonaspdotnet.Persistence;
 
@@ -9,4 +10,6 @@ public interface IEndorsementRepository
     Task AddAsync(Endorsement endorsement, CancellationToken cancellationToken);
     Task UpdateAsync(Endorsement endorsement, CancellationToken cancellationToken);
     Task DeleteAsync(Endorsement endorsement, CancellationToken cancellationToken);
+
+
 }

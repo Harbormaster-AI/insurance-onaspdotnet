@@ -1,3 +1,4 @@
+
 using insuranceonaspdotnet.Contracts;
 
 namespace insuranceonaspdotnet.Domain;
